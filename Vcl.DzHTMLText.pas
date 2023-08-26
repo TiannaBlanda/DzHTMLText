@@ -988,6 +988,7 @@ end;
 
 procedure TDzHTMLText.Modified(Flags: TDHModifiedFlags);
 begin
+  if not (HasParent and Assigned(Canvas)) then Exit; //avoid unavailable interface when loading control
   if UpdatingSemaphore>0 then Exit;
 
   if mfBuild in Flags then Rebuild;
@@ -1232,9 +1233,8 @@ begin
   if InternalResizing then Exit;
 
   //on component creating, there is no parent and the resize is fired,
-  //so, the canvas is not present at this moment.
-  if HasParent and Assigned(Canvas) then
-    Modified([mfBuild]);
+  //so, the canvas is not present at this moment (controled at Modified method)
+  Modified([mfBuild]);
 
   inherited;
 end;
